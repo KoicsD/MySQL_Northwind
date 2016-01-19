@@ -1,4 +1,5 @@
 __author__ = 'KoicsD'
+from time import sleep
 import menu
 import data_handler
 
@@ -25,6 +26,8 @@ def shutdown():
 def main():
     global main_menu
     main_menu.load()
+    sleep(1)
+    menu.system("cls")
     shutdown()
 
 
