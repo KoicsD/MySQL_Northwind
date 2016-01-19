@@ -25,6 +25,14 @@ def shutdown():
     connection = None
 
 
+def csv_to_sql():
+    print("Yes, copying data from CSV file to MySQL server.")
+
+
+def sql_to_csv():
+    print("Yes, copying data from MySQL server to CSV file.")
+
+
 def demo():
     global cursor
     cursor.execute("SELECT * FROM Employees")
