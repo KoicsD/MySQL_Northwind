@@ -1,3 +1,6 @@
+# connection config file:
+/connection.json
+
 # python-related ignore paths
 
 # Byte-compiled / optimized / DLL files
@@ -60,3 +63,4 @@ target/
 
 # PyCharm
 .idea/
+
