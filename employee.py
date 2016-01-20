@@ -3,6 +3,9 @@ from datetime import datetime
 
 
 date_format = "%Y-%m-%d"
+fields = ["EmployeeID", "LastName", "FirstName", "Title", "TitleOfCourtesy", "BirthDate", "HireDate", "Address", "City",
+          "Region", "PostalCode", "Country", "HomePhone", "Extension", "Photo", "Notes", "ReportsTo", "PhotoPath",
+          "Salary"]
 
 
 class Employee:
@@ -64,7 +67,16 @@ class Employee:
         pass
 
     def to_csv(self):
-        pass
+        new_dict = {}
+        for field in fields:
+            value = getattr(self, field)
+            if value is None:
+                new_dict[field] = "NULL"
+            elif type(value) is datetime:
+                new_dict[field] = value.strftime(date_format)
+            else:
+                new_dict[field] = str(value)
+        return new_dict
 
     @classmethod
     def select(cls):

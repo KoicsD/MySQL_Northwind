@@ -42,10 +42,16 @@ def shutdown():
 
 
 def csv_to_sql():
-    with open(employees_path, encoding="utf-8") as employees_file:
+    with open(employees_path, encoding="utf-8", newline="") as employees_file:
         csv_reader = csv.DictReader(employees_file, delimiter=";")
         for item in csv_reader:
             employees.append(employee.Employee.parse(item))
+
+    with open("Data/proba.csv", "w", encoding="utf-8", newline="") as file_obj:
+        csv_writer = csv.DictWriter(file_obj, employee.fields, delimiter=";")
+        csv_writer.writeheader()
+        for emp in employees:
+            csv_writer.writerow(emp.to_csv())
 
     # with open(customers_path, encoding="utf-8") as customers_file:
     #     raw_content = customers_file.readlines()
