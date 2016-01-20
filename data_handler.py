@@ -44,10 +44,16 @@ def shutdown():
 
 
 def csv_to_sql():
+    global employees
     with open(employees_path, encoding="utf-8", newline="") as employees_file:
         csv_reader = csv.DictReader(employees_file, delimiter=";")
         for item in csv_reader:
-            employees.append(employee.Employee.parse(item))
+            new_employee = employee.Employee.parse(item)
+            employees.append(new_employee)
+    for emp in employees:
+        emp.persist()
+        connection.commit()
+
 
     # with open(customers_path, encoding="utf-8") as customers_file:
     #     raw_content = customers_file.readlines()

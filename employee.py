@@ -68,7 +68,20 @@ class Employee:
 
     def persist(self):
         global cursor_obj
-        pass
+        not_null_fields = []
+        values = []
+        for field in fields:
+            current_value = getattr(self, field)
+            if current_value is not None:
+                not_null_fields.append(field)
+                values.append(current_value)
+        command = "INSERT INTO Employees (" +\
+                  ", ".join(not_null_fields) +\
+                  ") VALUES (" +\
+                  ", ".join(["%s"] * len(values)) + ")"
+        print(command)
+        print(values)
+        cursor_obj.execute(command, tuple(values))
 
     def to_csv(self):
         new_dict = {}
