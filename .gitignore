@@ -64,3 +64,6 @@ target/
 # PyCharm
 .idea/
 
+# data for running:
+Data/
+

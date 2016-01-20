@@ -1,11 +1,26 @@
 __author__ = 'KoicsD'
+import json
 import mysql.connector as sql
 from mysql.connector import errorcode
-import json
+from employee import *
+from customer import *
+from order import *
+from order_detail import *
+
+
+employees_path = "Data/employees.csv"
+customers_path = "Data/customers.csv"
+orders_path = "Data/orders.csv"
+order_details_path = "Data/order_details.csv"
 
 
 connection = None
 cursor = None
+
+employees = []
+customers = []
+orders = []
+order_details = []
 
 
 def startup():
@@ -26,7 +41,29 @@ def shutdown():
 
 
 def csv_to_sql():
-    print("Yes, copying data from CSV file to MySQL server.")
+    with open(employees_path, encoding="utf-8") as employees_file:
+        raw_content = employees_file.readlines()
+        raw_content.pop(0)  # dropping header
+        for row in raw_content:
+            employees.append(Employee.parse(row))
+
+    with open(customers_path, encoding="utf-8") as customers_file:
+        raw_content = customers_file.readlines()
+        raw_content.pop(0)  # dropping header
+        for row in raw_content:
+            customers.append(Customer.parse(row))
+
+    with open(orders_path, encoding="utf-8") as orders_file:
+        raw_content = orders_file.readlines()
+        raw_content.pop(0)  # dropping header
+        for row in raw_content:
+            orders.append(Order.parse(row))
+
+    with open(order_details_path, encoding="utf-8") as order_details_file:
+        raw_content = order_details_file.readlines()
+        raw_content.pop(0)  # dropping header
+        for row in raw_content:
+            order_details.append(OrderDetail.parse(row))
 
 
 def sql_to_csv():
