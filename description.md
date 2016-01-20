@@ -1,5 +1,9 @@
 # Task description
 
+---------------
+
+---------------
+
 ## Setup sample DB
 
 There is a given database schema named Northwind. You can read an article which explains it here:  
