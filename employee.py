@@ -79,8 +79,6 @@ class Employee:
                   ", ".join(not_null_fields) +\
                   ") VALUES (" +\
                   ", ".join(["%s"] * len(values)) + ")"
-        print(command)
-        print(values)
         cursor_obj.execute(command, tuple(values))
 
     def to_csv(self):
@@ -109,6 +107,5 @@ class Employee:
         cursor_obj.execute(querry)
         new_objects = []
         for record in cursor_obj:
-            print(record)
             new_objects.append(cls.compose(record))
         return new_objects

@@ -32,11 +32,17 @@ def startup():
         connection = sql.connect(**parsed_params)
         cursor = connection.cursor()
         employee.cursor_obj = cursor
+        customer.cursor_obj = cursor
+        order.cursor_obj = cursor
+        order_detail.cursor_obj = cursor
 
 
 def shutdown():
     global connection, cursor
     employee.cursor_obj = None
+    customer.cursor_obj = None
+    order.cursor_obj = None
+    order_detail.cursor_obj = None
     cursor.close()
     cursor = None
     connection.close()
@@ -45,6 +51,8 @@ def shutdown():
 
 def csv_to_sql():
     global employees
+
+    # employees:
     with open(employees_path, encoding="utf-8", newline="") as employees_file:
         csv_reader = csv.DictReader(employees_file, delimiter=";")
         for item in csv_reader:
@@ -54,24 +62,9 @@ def csv_to_sql():
         emp.persist()
         connection.commit()
 
-
-    # with open(customers_path, encoding="utf-8") as customers_file:
-    #     raw_content = customers_file.readlines()
-    #     raw_content.pop(0)  # dropping header
-    #     for row in raw_content:
-    #         customers.append(Customer.parse(row))
-    #
-    # with open(orders_path, encoding="utf-8") as orders_file:
-    #     raw_content = orders_file.readlines()
-    #     raw_content.pop(0)  # dropping header
-    #     for row in raw_content:
-    #         orders.append(Order.parse(row))
-    #
-    # with open(order_details_path, encoding="utf-8") as order_details_file:
-    #     raw_content = order_details_file.readlines()
-    #     raw_content.pop(0)  # dropping header
-    #     for row in raw_content:
-    #         order_details.append(OrderDetail.parse(row))
+    # customers?
+    # order?
+    # order_details?
 
 
 def sql_to_csv():
