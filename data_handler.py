@@ -31,10 +31,12 @@ def startup():
         parsed_params = json.loads(file_content)
         connection = sql.connect(**parsed_params)
         cursor = connection.cursor()
+        employee.cursor_obj = cursor
 
 
 def shutdown():
     global connection, cursor
+    employee.cursor_obj = None
     cursor.close()
     cursor = None
     connection.close()
@@ -46,12 +48,6 @@ def csv_to_sql():
         csv_reader = csv.DictReader(employees_file, delimiter=";")
         for item in csv_reader:
             employees.append(employee.Employee.parse(item))
-
-    with open("Data/proba.csv", "w", encoding="utf-8", newline="") as file_obj:
-        csv_writer = csv.DictWriter(file_obj, employee.fields, delimiter=";")
-        csv_writer.writeheader()
-        for emp in employees:
-            csv_writer.writerow(emp.to_csv())
 
     # with open(customers_path, encoding="utf-8") as customers_file:
     #     raw_content = customers_file.readlines()
@@ -73,7 +69,13 @@ def csv_to_sql():
 
 
 def sql_to_csv():
-    print("Yes, copying data from MySQL server to CSV file.")
+    global employees
+    employees += employee.Employee.select()
+    with open(employees_path, "w", encoding="utf-8", newline="") as employee_file:
+        csv_writer = csv.DictWriter(employee_file, employee.fields, delimiter=";")
+        csv_writer.writeheader()
+        for emp in employees:
+            csv_writer.writerow(emp.to_csv())
 
 
 def demo():

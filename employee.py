@@ -8,6 +8,9 @@ fields = ["EmployeeID", "LastName", "FirstName", "Title", "TitleOfCourtesy", "Bi
           "Salary"]
 
 
+cursor_obj = None
+
+
 class Employee:
     EmployeeID_type = int
     LastName_type = str
@@ -63,7 +66,8 @@ class Employee:
                 setattr(new_obj, key, parsed_value)
         return new_obj
 
-    def persist(self, cursor_obj):
+    def persist(self):
+        global cursor_obj
         pass
 
     def to_csv(self):
@@ -79,5 +83,19 @@ class Employee:
         return new_dict
 
     @classmethod
+    def compose(cls, values: tuple):
+        new_obj = cls()
+        for i in range(len(fields)):
+            setattr(new_obj, fields[i], values[i])
+        return new_obj
+
+    @classmethod
     def select(cls):
-        pass
+        global cursor_obj
+        querry = "SELECT " + ", ".join(fields) + " FROM Employees"
+        cursor_obj.execute(querry)
+        new_objects = []
+        for record in cursor_obj:
+            print(record)
+            new_objects.append(cls.compose(record))
+        return new_objects
