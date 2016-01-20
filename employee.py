@@ -1,31 +1,63 @@
 __author__ = 'KoicsD'
+from datetime import datetime
+
+
+date_format = "%Y-%m-%d"
 
 
 class Employee:
+    EmployeeID_type = int
+    LastName_type = str
+    FirstName_type = str
+    Title_type = str
+    TitleOfCourtesy_type = str
+    BirthDate_type = str
+    HireDate_type = datetime
+    Address_type = str
+    City_type = str
+    Region_type = str
+    PostalCode_type = str
+    Country_type = str
+    HomePhone_type = str
+    Extension_type = str
+    Photo_type = str
+    Notes_type = str
+    ReportsTo_type = int
+    PhotoPath_type = str
+    Salary_type = float
+
     def __init__(self):
-        self.EmployeeID = 0
-        self.LastName = ""
-        self.FirstName = ""
-        self.Title = ""
-        self.TitleOfCourtesy = ""
-        self.BirthDate = None  # datetime
-        self.HireDate = None  # datetime
-        self.Address = ""
-        self.City = ""
-        self.Region = ""
-        self.PostalCode = ""
-        self.Country = ""
-        self.HomePhone = ""
-        self.Extension = ""
-        self.Photo = None  # longblob
-        self.Notes = ""
-        self.ReportsTo = 0
-        self.PhotoPath = ""
-        self.Salary = 0.0
+        self.EmployeeID = None
+        self.LastName = None
+        self.FirstName = None
+        self.Title = None
+        self.TitleOfCourtesy = None
+        self.BirthDate = None
+        self.HireDate = None
+        self.Address = None
+        self.City = None
+        self.Region = None
+        self.PostalCode = None
+        self.Country = None
+        self.HomePhone = None
+        self.Extension = None
+        self.Photo = None
+        self.Notes = None
+        self.ReportsTo = None
+        self.PhotoPath = None
+        self.Salary = None
 
     @classmethod
-    def parse(cls, csv_row: str):
+    def parse(cls, csv_row: dict):
         new_obj = cls()
+        for key, value in csv_row.items():
+            type_of_attr = getattr(cls, key + "_type")
+            if value != "NULL":
+                if type_of_attr == datetime:
+                    parsed_value = datetime.strptime(value, date_format)
+                else:
+                    parsed_value = type_of_attr(value)
+                setattr(new_obj, key, parsed_value)
         return new_obj
 
     def persist(self, cursor_obj):

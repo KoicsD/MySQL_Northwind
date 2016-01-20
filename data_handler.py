@@ -1,11 +1,12 @@
 __author__ = 'KoicsD'
 import json
+import csv
 import mysql.connector as sql
 from mysql.connector import errorcode
-from employee import *
-from customer import *
-from order import *
-from order_detail import *
+import employee
+import customer
+import order
+import order_detail
 
 
 employees_path = "Data/employees.csv"
@@ -42,28 +43,27 @@ def shutdown():
 
 def csv_to_sql():
     with open(employees_path, encoding="utf-8") as employees_file:
-        raw_content = employees_file.readlines()
-        raw_content.pop(0)  # dropping header
-        for row in raw_content:
-            employees.append(Employee.parse(row))
+        csv_reader = csv.DictReader(employees_file, delimiter=";")
+        for item in csv_reader:
+            employees.append(employee.Employee.parse(item))
 
-    with open(customers_path, encoding="utf-8") as customers_file:
-        raw_content = customers_file.readlines()
-        raw_content.pop(0)  # dropping header
-        for row in raw_content:
-            customers.append(Customer.parse(row))
-
-    with open(orders_path, encoding="utf-8") as orders_file:
-        raw_content = orders_file.readlines()
-        raw_content.pop(0)  # dropping header
-        for row in raw_content:
-            orders.append(Order.parse(row))
-
-    with open(order_details_path, encoding="utf-8") as order_details_file:
-        raw_content = order_details_file.readlines()
-        raw_content.pop(0)  # dropping header
-        for row in raw_content:
-            order_details.append(OrderDetail.parse(row))
+    # with open(customers_path, encoding="utf-8") as customers_file:
+    #     raw_content = customers_file.readlines()
+    #     raw_content.pop(0)  # dropping header
+    #     for row in raw_content:
+    #         customers.append(Customer.parse(row))
+    #
+    # with open(orders_path, encoding="utf-8") as orders_file:
+    #     raw_content = orders_file.readlines()
+    #     raw_content.pop(0)  # dropping header
+    #     for row in raw_content:
+    #         orders.append(Order.parse(row))
+    #
+    # with open(order_details_path, encoding="utf-8") as order_details_file:
+    #     raw_content = order_details_file.readlines()
+    #     raw_content.pop(0)  # dropping header
+    #     for row in raw_content:
+    #         order_details.append(OrderDetail.parse(row))
 
 
 def sql_to_csv():
