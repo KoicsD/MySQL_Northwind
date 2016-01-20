@@ -44,7 +44,7 @@ List table : Sub-menu >Employees, Customers, Orders, Orders and details
 Attachments:  
 [customers.csv](sample/customers.csv)  
 [employees.csv](sample/employees.csv)  
-[order_details.csv](sample/oder_details.csv)  
+[order_details.csv](sample/order_details.csv)  
 [orders.csv](sample/orders.csv)  
 
 --------
