@@ -1,5 +1,9 @@
 # Task description
 
+---------------
+
+---------------
+
 ## Setup sample DB
 
 There is a given database schema named Northwind. You can read an article which explains it here:  
@@ -15,7 +19,7 @@ After this please tries to explore a DB structure and the data it contains. What
 
 -----------
 
-tags: DBMS SQL
+tags: [DBMS](https://en.wikipedia.org/wiki/Database) [SQL](https://en.wikipedia.org/wiki/SQL)
 
 ------------------
 
@@ -49,4 +53,4 @@ Attachments:
 
 --------
 
-Tags: DBMS OOP python SQL
+Tags: [DBMS](https://en.wikipedia.org/wiki/Database) [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming) [*python*](https://en.wikipedia.org/wiki/Python_(programming_language)) [SQL](https://en.wikipedia.org/wiki/SQL)
