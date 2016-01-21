@@ -3,7 +3,7 @@ SELECT
     ProductID,
     (
 		SELECT ProductName FROM Products
-        WHERE products.ProductID = orderdetails.ProductID
+        WHERE Products.ProductID = OrderDetails.ProductID
 	) AS ProductName,
     UnitPrice,
     Quantity,
