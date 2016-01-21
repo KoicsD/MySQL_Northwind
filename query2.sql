@@ -10,4 +10,5 @@ SELECT
     CompanyName,
     ContactName,
     'Supplier' AS RelationShip
-FROM Suppliers;
+FROM Suppliers
+ORDER BY City, ContactName;
