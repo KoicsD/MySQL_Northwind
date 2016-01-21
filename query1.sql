@@ -9,4 +9,5 @@ SELECT
     Quantity,
     Discount,
 	Quantity * UnitPrice * (1 - Discount) AS Total
-FROM OrderDetails;
+FROM OrderDetails
+ORDER BY OrderID;
