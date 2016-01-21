@@ -1,12 +1,8 @@
-SELECT
-	/*YearOfINcome,
+/*SELECT
+	YearOfINcome,
     CategoryName,
     ProductName,
-    ProductSales*/
-    ProductName,
-    -- CustomerID,
-    Quantity,
-    ShippedDate
+    ProductSales
 FROM
 	Products
 JOIN
@@ -14,4 +10,33 @@ JOIN
 		ON Products.ProductID = OrderDetails.ProductID
 JOIN
 	Orders
-		ON OrderDetails.ProductID;
+		ON OrderDetails.OrderID = Orders.OrderID;*/
+
+SELECT
+    Products.ProductName,
+	-- Orders.CustomerID,
+    OrderDetails.Quantity,
+    Orders.ShippedDate
+FROM
+	Products
+JOIN
+	OrderDetails
+		ON Products.ProductID = OrderDetails.ProductID
+JOIN
+	Orders
+		ON OrderDetails.OrderID = Orders.OrderID;  -- returns NULL as ShippedDate
+
+SELECT
+    Products.ProductName,
+	Orders.CustomerID,  -- here is the difference
+    OrderDetails.Quantity,
+    Orders.ShippedDate
+FROM
+	Products
+JOIN
+	OrderDetails
+		ON Products.ProductID = OrderDetails.ProductID
+JOIN
+	Orders
+		ON OrderDetails.OrderID = Orders.OrderID;  -- returns ShippedDate properly
+-- WHY???!!!
