@@ -51,11 +51,11 @@ def shutdown():
 
 
 def csv_to_sql():
-    global employees
+    global employees, customers, orders, order_details
 
     # employees:
-    with open(employees_path, encoding="utf-8", newline="") as employees_file:
-        csv_reader = csv.DictReader(employees_file, delimiter=";")
+    with open(employees_path, encoding="utf-8", newline='') as employees_file:
+        csv_reader = csv.DictReader(employees_file, delimiter=';')
         for item in csv_reader:
             new_employee = Employee.parse(item)
             employees.append(new_employee)
@@ -63,19 +63,38 @@ def csv_to_sql():
         emp.persist()
         connection.commit()
 
-    # customers?
+    # customers:
+    with open(customers_path, encoding="utf-8", newline='') as customers_file:
+        csv_reader = csv.DictReader(customers_file, delimiter=';')
+        for item in csv_reader:
+            new_customer = Customer.parse(item)
+            customers.append(new_customer)
+    for customer in customers:
+        customer.persist()
+        connection.commit()
+
     # order?
     # order_details?
 
 
 def sql_to_csv():
-    global employees
+    global employees, customers, orders, order_details
+
+    # employees:
     employees += Employee.select()
-    with open(employees_path, "w", encoding="utf-8", newline="") as employee_file:
-        csv_writer = csv.DictWriter(employee_file, Employee.get_fields(), delimiter=";")
+    with open(employees_path, "w", encoding="utf-8", newline='') as employee_file:
+        csv_writer = csv.DictWriter(employee_file, Employee.get_fields(), delimiter=';')
         csv_writer.writeheader()
         for emp in employees:
             csv_writer.writerow(emp.to_csv())
+
+    # customers:
+    customers += Customer.select()
+    with open(customers_path, "w", encoding="utf-8", newline='') as customer_file:
+        csv_writer = csv.DictWriter(customer_file, Customer.get_fields(), delimiter=';')
+        csv_writer.writeheader()
+        for customer in customers:
+            csv_writer.writerow(customer.to_csv())
 
 
 def demo():

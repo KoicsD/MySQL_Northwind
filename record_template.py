@@ -7,6 +7,7 @@ cursor_obj = None
 
 
 class Record:
+    table_name = ""
     fields = ()
 
     @classmethod
@@ -45,7 +46,7 @@ class Record:
             if current_value is not None:
                 not_null_fields.append(field)
                 values.append(current_value)
-        command = "INSERT INTO Employees (" +\
+        command = "INSERT INTO " + self.table_name + " (" +\
                   ", ".join(not_null_fields) +\
                   ") VALUES (" +\
                   ", ".join(["%s"] * len(values)) + ")"
@@ -74,7 +75,7 @@ class Record:
     @classmethod
     def select(cls):
         global cursor_obj
-        query = "SELECT " + ", ".join(cls.get_fields()) + " FROM Employees"
+        query = "SELECT " + ", ".join(cls.get_fields()) + " FROM " + cls.table_name
         cursor_obj.execute(query)
         new_objects = []
         for record in cursor_obj:
