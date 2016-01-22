@@ -3,16 +3,17 @@ from datetime import datetime
 
 
 date_format = "%Y-%m-%d"
-fields = (("EmployeeID", int), ("LastName", str), ("FirstName", str), ("Title", str), ("TitleOfCourtesy", str),
-          ("BirthDate", datetime), ("HireDate", datetime), ("Address", str), ("City", str), ("Region", str),
-          ("PostalCode", str), ("Country", str), ("HomePhone", str), ("Extension", str), ("Photo", str), ("Notes", str),
-          ("ReportsTo", int), ("PhotoPath", str), ("Salary", float))
 
 
 cursor_obj = None
 
 
 class Employee:
+    fields = (("EmployeeID", int), ("LastName", str), ("FirstName", str), ("Title", str), ("TitleOfCourtesy", str),
+              ("BirthDate", datetime), ("HireDate", datetime), ("Address", str), ("City", str), ("Region", str),
+              ("PostalCode", str), ("Country", str), ("HomePhone", str), ("Extension", str), ("Photo", str),
+              ("Notes", str), ("ReportsTo", int), ("PhotoPath", str), ("Salary", float))
+
     EmployeeID_type = int
     LastName_type = str
     FirstName_type = str
@@ -33,9 +34,9 @@ class Employee:
     PhotoPath_type = str
     Salary_type = float
 
-    @staticmethod
-    def get_fields():
-        return [f for f, t in fields]
+    @classmethod
+    def get_fields(cls):
+        return [f for f, t in cls.fields]
 
     def __init__(self):
         for field in self.get_fields():
