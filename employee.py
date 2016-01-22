@@ -38,6 +38,12 @@ class Employee:
     def get_fields(cls):
         return [f for f, t in cls.fields]
 
+    @classmethod
+    def get_type(cls, field_name: str):
+        for f, t in cls.fields:
+            if f == field_name:
+                return t
+
     def __init__(self):
         for field in self.get_fields():
             setattr(self, field, None)
@@ -46,7 +52,7 @@ class Employee:
     def parse(cls, csv_row: dict):
         new_obj = cls()
         for key, value in csv_row.items():
-            type_of_attr = getattr(cls, key + "_type")
+            type_of_attr = cls.get_type(key)
             if value != "NULL":
                 if type_of_attr == datetime:
                     parsed_value = datetime.strptime(value, date_format)
