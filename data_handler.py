@@ -3,10 +3,11 @@ import json
 import csv
 import mysql.connector as sql
 from mysql.connector import errorcode
-import employee
-import customer
-import order
-import order_detail
+import record_template
+from employee import Employee
+from customer import Customer
+from order import Order
+from order_detail import OrderDetail
 
 
 employees_path = "Data/employees.csv"
@@ -31,18 +32,18 @@ def startup():
         parsed_params = json.loads(file_content)
         connection = sql.connect(**parsed_params)
         cursor = connection.cursor()
-        employee.cursor_obj = cursor
-        customer.cursor_obj = cursor
-        order.cursor_obj = cursor
-        order_detail.cursor_obj = cursor
+        record_template.cursor_obj = cursor
+        record_template.cursor_obj = cursor
+        record_template.cursor_obj = cursor
+        record_template.cursor_obj = cursor
 
 
 def shutdown():
     global connection, cursor
-    employee.cursor_obj = None
-    customer.cursor_obj = None
-    order.cursor_obj = None
-    order_detail.cursor_obj = None
+    record_template.cursor_obj = None
+    record_template.cursor_obj = None
+    record_template.cursor_obj = None
+    record_template.cursor_obj = None
     cursor.close()
     cursor = None
     connection.close()
@@ -56,7 +57,7 @@ def csv_to_sql():
     with open(employees_path, encoding="utf-8", newline="") as employees_file:
         csv_reader = csv.DictReader(employees_file, delimiter=";")
         for item in csv_reader:
-            new_employee = employee.Employee.parse(item)
+            new_employee = Employee.parse(item)
             employees.append(new_employee)
     for emp in employees:
         emp.persist()
@@ -69,9 +70,9 @@ def csv_to_sql():
 
 def sql_to_csv():
     global employees
-    employees += employee.Employee.select()
+    employees += Employee.select()
     with open(employees_path, "w", encoding="utf-8", newline="") as employee_file:
-        csv_writer = csv.DictWriter(employee_file, employee.Employee.get_fields(), delimiter=";")
+        csv_writer = csv.DictWriter(employee_file, Employee.get_fields(), delimiter=";")
         csv_writer.writeheader()
         for emp in employees:
             csv_writer.writerow(emp.to_csv())
