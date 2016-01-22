@@ -88,24 +88,41 @@ def import_all():
     # import_order_details()
 
 
-def sql_to_csv():
-    global employees, customers, orders, order_details
-
-    # employees:
-    employees += Employee.select()
-    with open(employees_path, "w", encoding="utf-8", newline='') as employee_file:
-        csv_writer = csv.DictWriter(employee_file, Employee.get_fields(), delimiter=';')
+def sql_to_csv(file_path: str, record_list: list, record_class):
+    global connection
+    record_list += record_class.select()
+    with open(file_path, "w", encoding="utf-8", newline='') as file_obj:
+        csv_writer = csv.DictWriter(file_obj, record_class.get_fields(), delimiter=';')
         csv_writer.writeheader()
-        for emp in employees:
-            csv_writer.writerow(emp.to_csv())
+        for record in record_list:
+            csv_writer.writerow(record.to_csv())
 
-    # customers:
-    customers += Customer.select()
-    with open(customers_path, "w", encoding="utf-8", newline='') as customer_file:
-        csv_writer = csv.DictWriter(customer_file, Customer.get_fields(), delimiter=';')
-        csv_writer.writeheader()
-        for customer in customers:
-            csv_writer.writerow(customer.to_csv())
+
+def export_employees():
+    global employees, employees_path
+    sql_to_csv(employees_path, employees, Employee)
+
+
+def export_customers():
+    global customers, customers_path
+    sql_to_csv(customers_path, customers, Customer)
+
+
+def export_orders():
+    global orders, orders_path
+    sql_to_csv(orders, orders_path, Order)
+
+
+def export_order_details():
+    global order_details, order_details_path
+    sql_to_csv(order_details_path, order_details, OrderDetail)
+
+
+def export_all():
+    export_employees()
+    export_customers()
+    # export_orders()
+    # export_order_details()
 
 
 def demo():
