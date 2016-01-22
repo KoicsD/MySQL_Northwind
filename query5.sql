@@ -1,18 +1,43 @@
-/*SELECT
-	YearOfINcome,
+SELECT
+	YearOfIncome,
     CategoryName,
     ProductName,
-    ProductSales
+    SUM(OrderTotal) AS ProductSales
 FROM
-	Products
-JOIN
-	OrderDetails
-		ON Products.ProductID = OrderDetails.ProductID
-JOIN
-	Orders
-		ON OrderDetails.OrderID = Orders.OrderID;*/
+	(
+		SELECT
+			YEAR(ShippedDate) AS YearOfIncome,
+			(
+				SELECT
+					CategoryName
+				FROM
+					Categories
+				WHERE
+					Categories.CategoryID = Products.CategoryID
+			)
+			AS CategoryName,
+			ProductName,
+			(
+				OrderDetails.UnitPrice * Quantity * (1 - Discount)
+			)
+			AS OrderTotal
+		FROM
+			Products
+		JOIN
+			OrderDetails
+				ON Products.ProductID = OrderDetails.ProductID
+		JOIN
+			Orders
+				ON OrderDetails.OrderID = Orders.OrderID
+	)
+    AS OrderSeparated
+GROUP BY
+	ProductName, YearOfIncome
+ORDER BY
+	ProductName, YearOfIncome;
 
-SELECT
+
+/*SELECT
     Products.ProductName,
 	-- Orders.CustomerID,
     OrderDetails.Quantity,
@@ -39,4 +64,4 @@ JOIN
 JOIN
 	Orders
 		ON OrderDetails.OrderID = Orders.OrderID;  -- returns ShippedDate properly
--- WHY???!!!
+-- WHY???!!!*/
