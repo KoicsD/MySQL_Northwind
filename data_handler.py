@@ -50,79 +50,83 @@ def shutdown():
     connection = None
 
 
-def csv_to_sql(file_path: str, record_list: list, record_class):
-    global connection
-    with open(file_path, encoding="utf-8", newline='') as file_obj:
-        csv_reader = csv.DictReader(file_obj, delimiter=';')
-        for row in csv_reader:
-            new_record = record_class.parse(row)
-            new_record.persist()
-            record_list.append(new_record)
-            connection.commit()
+class Importer:
+    @staticmethod
+    def csv_to_sql(file_path: str, record_list: list, record_class):
+        global connection
+        with open(file_path, encoding="utf-8", newline='') as file_obj:
+            csv_reader = csv.DictReader(file_obj, delimiter=';')
+            for row in csv_reader:
+                new_record = record_class.parse(row)
+                new_record.persist()
+                record_list.append(new_record)
+                connection.commit()
+
+    @staticmethod
+    def import_employees():
+        global employees, employees_path
+        Importer.csv_to_sql(employees_path, employees, Employee)
+
+    @staticmethod
+    def import_customers():
+        global customers, customers_path
+        Importer.csv_to_sql(customers_path, customers, Customer)
+
+    @staticmethod
+    def import_orders():
+        global orders, orders_path
+        Importer.csv_to_sql(orders_path, orders, Order)
+
+    @staticmethod
+    def import_order_details():
+        global order_details, order_details_path
+        Importer.csv_to_sql(order_details_path, order_details, OrderDetail)
+
+    @staticmethod
+    def import_all():
+        Importer.import_employees()
+        Importer.import_customers()
+        # Importer.import_orders()
+        # Importer.import_order_details()
 
 
-def import_employees():
-    global employees, employees_path
-    csv_to_sql(employees_path, employees, Employee)
+class Exporter:
+    @staticmethod
+    def sql_to_csv(file_path: str, record_list: list, record_class):
+        global connection
+        record_list += record_class.select()
+        with open(file_path, "w", encoding="utf-8", newline='') as file_obj:
+            csv_writer = csv.DictWriter(file_obj, record_class.get_fields(), delimiter=';')
+            csv_writer.writeheader()
+            for record in record_list:
+                csv_writer.writerow(record.to_csv())
 
+    @staticmethod
+    def export_employees():
+        global employees, employees_path
+        Exporter.sql_to_csv(employees_path, employees, Employee)
 
-def import_customers():
-    global customers, customers_path
-    csv_to_sql(customers_path, customers, Customer)
+    @staticmethod
+    def export_customers():
+        global customers, customers_path
+        Exporter.sql_to_csv(customers_path, customers, Customer)
 
+    @staticmethod
+    def export_orders():
+        global orders, orders_path
+        Exporter.sql_to_csv(orders, orders_path, Order)
 
-def import_orders():
-    global orders, orders_path
-    csv_to_sql(orders_path, orders, Order)
+    @staticmethod
+    def export_order_details():
+        global order_details, order_details_path
+        Exporter.sql_to_csv(order_details_path, order_details, OrderDetail)
 
-
-def import_order_details():
-    global order_details, order_details_path
-    csv_to_sql(order_details_path, order_details, OrderDetail)
-
-
-def import_all():
-    import_employees()
-    import_customers()
-    # import_orders()
-    # import_order_details()
-
-
-def sql_to_csv(file_path: str, record_list: list, record_class):
-    global connection
-    record_list += record_class.select()
-    with open(file_path, "w", encoding="utf-8", newline='') as file_obj:
-        csv_writer = csv.DictWriter(file_obj, record_class.get_fields(), delimiter=';')
-        csv_writer.writeheader()
-        for record in record_list:
-            csv_writer.writerow(record.to_csv())
-
-
-def export_employees():
-    global employees, employees_path
-    sql_to_csv(employees_path, employees, Employee)
-
-
-def export_customers():
-    global customers, customers_path
-    sql_to_csv(customers_path, customers, Customer)
-
-
-def export_orders():
-    global orders, orders_path
-    sql_to_csv(orders, orders_path, Order)
-
-
-def export_order_details():
-    global order_details, order_details_path
-    sql_to_csv(order_details_path, order_details, OrderDetail)
-
-
-def export_all():
-    export_employees()
-    export_customers()
-    # export_orders()
-    # export_order_details()
+    @staticmethod
+    def export_all():
+        Exporter.export_employees()
+        Exporter.export_customers()
+        # Exporter.export_orders()
+        # Exporter.export_order_details()
 
 
 def demo():
