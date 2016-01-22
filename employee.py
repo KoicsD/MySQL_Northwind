@@ -1,5 +1,4 @@
 __author__ = 'KoicsD'
-from datetime import datetime
 from record_template import *
 
 
