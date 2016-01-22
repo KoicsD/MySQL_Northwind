@@ -118,9 +118,3 @@ class Exporter:
         Exporter.export_customers()
         Exporter.export_orders()
         Exporter.export_order_details()
-
-
-def demo():
-    record_template.cursor_obj.execute("SELECT * FROM Employees")
-    for item in record_template.cursor_obj:
-        print(item)
