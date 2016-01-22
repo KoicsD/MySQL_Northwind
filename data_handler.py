@@ -86,7 +86,7 @@ class Importer:
     def import_all():
         Importer.import_employees()
         Importer.import_customers()
-        # Importer.import_orders()
+        Importer.import_orders()
         # Importer.import_order_details()
 
 
@@ -114,7 +114,7 @@ class Exporter:
     @staticmethod
     def export_orders():
         global orders, orders_path
-        Exporter.sql_to_csv(orders, orders_path, Order)
+        Exporter.sql_to_csv(orders_path, orders, Order)
 
     @staticmethod
     def export_order_details():
@@ -125,7 +125,7 @@ class Exporter:
     def export_all():
         Exporter.export_employees()
         Exporter.export_customers()
-        # Exporter.export_orders()
+        Exporter.export_orders()
         # Exporter.export_order_details()
 
 
