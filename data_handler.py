@@ -87,7 +87,7 @@ class Importer:
         Importer.import_employees()
         Importer.import_customers()
         Importer.import_orders()
-        # Importer.import_order_details()
+        Importer.import_order_details()
 
 
 class Exporter:
@@ -126,7 +126,7 @@ class Exporter:
         Exporter.export_employees()
         Exporter.export_customers()
         Exporter.export_orders()
-        # Exporter.export_order_details()
+        Exporter.export_order_details()
 
 
 def demo():
