@@ -14,26 +14,6 @@ class Employee:
               ("PostalCode", str), ("Country", str), ("HomePhone", str), ("Extension", str), ("Photo", str),
               ("Notes", str), ("ReportsTo", int), ("PhotoPath", str), ("Salary", float))
 
-    EmployeeID_type = int
-    LastName_type = str
-    FirstName_type = str
-    Title_type = str
-    TitleOfCourtesy_type = str
-    BirthDate_type = str
-    HireDate_type = datetime
-    Address_type = str
-    City_type = str
-    Region_type = str
-    PostalCode_type = str
-    Country_type = str
-    HomePhone_type = str
-    Extension_type = str
-    Photo_type = str
-    Notes_type = str
-    ReportsTo_type = int
-    PhotoPath_type = str
-    Salary_type = float
-
     @classmethod
     def get_fields(cls):
         return [f for f, t in cls.fields]
