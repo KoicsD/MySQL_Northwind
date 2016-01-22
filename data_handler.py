@@ -71,7 +71,7 @@ def sql_to_csv():
     global employees
     employees += employee.Employee.select()
     with open(employees_path, "w", encoding="utf-8", newline="") as employee_file:
-        csv_writer = csv.DictWriter(employee_file, employee.fields, delimiter=";")
+        csv_writer = csv.DictWriter(employee_file, employee.Employee.get_fields(), delimiter=";")
         csv_writer.writeheader()
         for emp in employees:
             csv_writer.writerow(emp.to_csv())

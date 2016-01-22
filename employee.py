@@ -3,9 +3,10 @@ from datetime import datetime
 
 
 date_format = "%Y-%m-%d"
-fields = ["EmployeeID", "LastName", "FirstName", "Title", "TitleOfCourtesy", "BirthDate", "HireDate", "Address", "City",
-          "Region", "PostalCode", "Country", "HomePhone", "Extension", "Photo", "Notes", "ReportsTo", "PhotoPath",
-          "Salary"]
+fields = (("EmployeeID", int), ("LastName", str), ("FirstName", str), ("Title", str), ("TitleOfCourtesy", str),
+          ("BirthDate", datetime), ("HireDate", datetime), ("Address", str), ("City", str), ("Region", str),
+          ("PostalCode", str), ("Country", str), ("HomePhone", str), ("Extension", str), ("Photo", str), ("Notes", str),
+          ("ReportsTo", int), ("PhotoPath", str), ("Salary", float))
 
 
 cursor_obj = None
@@ -32,26 +33,13 @@ class Employee:
     PhotoPath_type = str
     Salary_type = float
 
+    @staticmethod
+    def get_fields():
+        return [f for f, t in fields]
+
     def __init__(self):
-        self.EmployeeID = None
-        self.LastName = None
-        self.FirstName = None
-        self.Title = None
-        self.TitleOfCourtesy = None
-        self.BirthDate = None
-        self.HireDate = None
-        self.Address = None
-        self.City = None
-        self.Region = None
-        self.PostalCode = None
-        self.Country = None
-        self.HomePhone = None
-        self.Extension = None
-        self.Photo = None
-        self.Notes = None
-        self.ReportsTo = None
-        self.PhotoPath = None
-        self.Salary = None
+        for field in self.get_fields():
+            setattr(self, field, None)
 
     @classmethod
     def parse(cls, csv_row: dict):
@@ -70,7 +58,7 @@ class Employee:
         global cursor_obj
         not_null_fields = []
         values = []
-        for field in fields:
+        for field in self.get_fields():
             current_value = getattr(self, field)
             if current_value is not None:
                 not_null_fields.append(field)
@@ -83,7 +71,7 @@ class Employee:
 
     def to_csv(self):
         new_dict = {}
-        for field in fields:
+        for field in self.get_fields():
             value = getattr(self, field)
             if value is None:
                 new_dict[field] = "NULL"
@@ -96,16 +84,18 @@ class Employee:
     @classmethod
     def compose(cls, values: tuple):
         new_obj = cls()
-        for i in range(len(fields)):
-            setattr(new_obj, fields[i], values[i])
+        field_names = cls.get_fields()
+        for i in range(len(field_names)):
+            setattr(new_obj, field_names[i], values[i])
         return new_obj
 
     @classmethod
     def select(cls):
         global cursor_obj
-        querry = "SELECT " + ", ".join(fields) + " FROM Employees"
+        querry = "SELECT " + ", ".join(cls.get_fields()) + " FROM Employees"
         cursor_obj.execute(querry)
         new_objects = []
         for record in cursor_obj:
             new_objects.append(cls.compose(record))
         return new_objects
+
