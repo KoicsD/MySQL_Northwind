@@ -50,31 +50,42 @@ def shutdown():
     connection = None
 
 
-def csv_to_sql():
-    global employees, customers, orders, order_details
+def csv_to_sql(file_path: str, record_list: list, record_class):
+    global connection
+    with open(file_path, encoding="utf-8", newline='') as file_obj:
+        csv_reader = csv.DictReader(file_obj, delimiter=';')
+        for row in csv_reader:
+            new_record = record_class.parse(row)
+            new_record.persist()
+            record_list.append(new_record)
+            connection.commit()
 
-    # employees:
-    with open(employees_path, encoding="utf-8", newline='') as employees_file:
-        csv_reader = csv.DictReader(employees_file, delimiter=';')
-        for item in csv_reader:
-            new_employee = Employee.parse(item)
-            employees.append(new_employee)
-    for emp in employees:
-        emp.persist()
-        connection.commit()
 
-    # customers:
-    with open(customers_path, encoding="utf-8", newline='') as customers_file:
-        csv_reader = csv.DictReader(customers_file, delimiter=';')
-        for item in csv_reader:
-            new_customer = Customer.parse(item)
-            customers.append(new_customer)
-    for customer in customers:
-        customer.persist()
-        connection.commit()
+def import_employees():
+    global employees, employees_path
+    csv_to_sql(employees_path, employees, Employee)
 
-    # order?
-    # order_details?
+
+def import_customers():
+    global customers, customers_path
+    csv_to_sql(customers_path, customers, Customer)
+
+
+def import_orders():
+    global orders, orders_path
+    csv_to_sql(orders_path, orders, Order)
+
+
+def import_order_details():
+    global order_details, order_details_path
+    csv_to_sql(order_details_path, order_details, OrderDetail)
+
+
+def import_all():
+    import_employees()
+    import_customers()
+    # import_orders()
+    # import_order_details()
 
 
 def sql_to_csv():
