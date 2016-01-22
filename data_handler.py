@@ -17,7 +17,6 @@ order_details_path = "Data/order_details.csv"
 
 
 connection = None
-cursor = None
 
 employees = []
 customers = []
@@ -26,26 +25,18 @@ order_details = []
 
 
 def startup():
-    global connection, cursor
+    global connection
     with open("connection.json") as config_file:
         file_content = config_file.read()
         parsed_params = json.loads(file_content)
         connection = sql.connect(**parsed_params)
-        cursor = connection.cursor()
-        record_template.cursor_obj = cursor
-        record_template.cursor_obj = cursor
-        record_template.cursor_obj = cursor
-        record_template.cursor_obj = cursor
+        record_template.cursor_obj = connection.cursor()
 
 
 def shutdown():
-    global connection, cursor
+    global connection
+    record_template.cursor_obj.close()
     record_template.cursor_obj = None
-    record_template.cursor_obj = None
-    record_template.cursor_obj = None
-    record_template.cursor_obj = None
-    cursor.close()
-    cursor = None
     connection.close()
     connection = None
 
@@ -130,7 +121,6 @@ class Exporter:
 
 
 def demo():
-    global cursor
-    cursor.execute("SELECT * FROM Employees")
-    for item in cursor:
+    record_template.cursor_obj.execute("SELECT * FROM Employees")
+    for item in record_template.cursor_obj:
         print(item)
