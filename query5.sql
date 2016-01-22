@@ -20,7 +20,8 @@ FROM
 			(
 				OrderDetails.UnitPrice * Quantity * (1 - Discount)
 			)
-			AS OrderTotal
+			AS OrderTotal,
+            OrderDetails.ProductID AS ProductID
 		FROM
 			Products
 		JOIN
@@ -32,7 +33,7 @@ FROM
 	)
     AS OrderSeparated
 GROUP BY
-	ProductName, YearOfIncome
+	ProductID, YearOfIncome
 ORDER BY
 	ProductName, YearOfIncome;
 
