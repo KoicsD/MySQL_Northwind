@@ -43,42 +43,47 @@ def shutdown():
 
 class Importer:
     @staticmethod
-    def csv_to_sql(file_path: str, record_list: list, record_class):
+    def csv_to_sql(file_path: str, record_list: list, record_class: type, to_commit: bool):
         global connection
         with open(file_path, encoding="utf-8", newline='') as file_obj:
             csv_reader = csv.DictReader(file_obj, delimiter=';')
             for row in csv_reader:
-                new_record = record_class.parse(row)
-                new_record.persist()
-                record_list.append(new_record)
-                connection.commit()
+                try:
+                    new_record = record_class.parse(row)
+                    new_record.persist()
+                    record_list.append(new_record)
+                    if to_commit:
+                        connection.commit()
+                except Exception as err:
+                    raise RuntimeError("An Exception was raised when processing file: '" + file_path + "'\n" +
+                                       "at line " + str(csv_reader.line_num)) from err
 
     @staticmethod
-    def import_employees():
+    def import_employees(to_commit=True):
         global employees, employees_path
-        Importer.csv_to_sql(employees_path, employees, Employee)
+        Importer.csv_to_sql(employees_path, employees, Employee, to_commit)
 
     @staticmethod
-    def import_customers():
+    def import_customers(to_commit=True):
         global customers, customers_path
-        Importer.csv_to_sql(customers_path, customers, Customer)
+        Importer.csv_to_sql(customers_path, customers, Customer, to_commit)
 
     @staticmethod
-    def import_orders():
+    def import_orders(to_commit=True):
         global orders, orders_path
-        Importer.csv_to_sql(orders_path, orders, Order)
+        Importer.csv_to_sql(orders_path, orders, Order, to_commit)
 
     @staticmethod
-    def import_order_details():
+    def import_order_details(to_commit=True):
         global order_details, order_details_path
-        Importer.csv_to_sql(order_details_path, order_details, OrderDetail)
+        Importer.csv_to_sql(order_details_path, order_details, OrderDetail, to_commit)
 
     @staticmethod
-    def import_all():
-        Importer.import_employees()
-        Importer.import_customers()
-        Importer.import_orders()
-        Importer.import_order_details()
+    def import_all(to_commit=True):
+        Importer.import_employees(False)
+        Importer.import_customers(False)
+        Importer.import_orders(False)
+        Importer.import_order_details(to_commit)
 
 
 class Exporter:

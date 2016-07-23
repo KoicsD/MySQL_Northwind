@@ -28,9 +28,11 @@ def main():
     main_menu.load()
     sleep(1)
     menu.system("cls")
-    shutdown()
 
 
 if __name__ == "__main__":
     startup()
-    main()
+    try:
+        main()
+    finally:
+        shutdown()
