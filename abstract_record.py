@@ -7,6 +7,16 @@ date_format = "%Y-%m-%d"
 cursor_obj = None
 
 
+def bytes_to_hex(bts: bytes):
+    hex_str = ""
+    for byte_as_int in bts:
+        byte_as_hex_str = hex(byte_as_int)[2:]  # hex-format strings always start with '0x' -- let's drop it
+        if len(byte_as_hex_str) == 1:
+            byte_as_hex_str = "0" + byte_as_hex_str
+        hex_str += byte_as_hex_str + " "
+    return hex_str[:-1]  # last space is ugly
+
+
 class Record:
     table_name = ""
     fields = ()
@@ -35,6 +45,8 @@ class Record:
             if value != "NULL":
                 if type_of_attr == datetime:
                     parsed_value = datetime.strptime(value, date_format)
+                elif type_of_attr == bytes:
+                    parsed_value = bytes.fromhex(value)
                 else:
                     parsed_value = type_of_attr(value)
                 setattr(new_obj, "_field_" + key, parsed_value)
@@ -65,8 +77,11 @@ class Record:
             value = getattr(self, "_field_" + field_name)
             if value is None:
                 new_dict[field_name] = "NULL"
-            elif type(value) is datetime:
+            elif type(value) == datetime:
                 new_dict[field_name] = value.strftime(date_format)
+            elif type(value) == bytes:
+                # new_dict[field_name] = value.hex()  # only from python 3.5
+                new_dict[field_name] = bytes_to_hex(value)
             else:
                 new_dict[field_name] = str(value)
         return new_dict
