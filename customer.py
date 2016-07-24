@@ -1,5 +1,5 @@
 __author__ = 'KoicsD'
-from record_template import *
+from abstract_record import *
 
 
 class Customer(Record):

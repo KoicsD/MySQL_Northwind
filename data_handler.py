@@ -2,7 +2,7 @@ __author__ = 'KoicsD'
 import json
 import csv
 import mysql.connector as sql
-import record_template
+import abstract_record
 from employee import Employee
 from customer import Customer
 from order import Order
@@ -29,13 +29,13 @@ def startup():
         file_content = config_file.read()
         parsed_params = json.loads(file_content)
         connection = sql.connect(**parsed_params)
-        record_template.cursor_obj = connection.cursor()
+        abstract_record.cursor_obj = connection.cursor()
 
 
 def shutdown():
     global connection
-    record_template.cursor_obj.close()
-    record_template.cursor_obj = None
+    abstract_record.cursor_obj.close()
+    abstract_record.cursor_obj = None
     connection.close()
     connection = None
 
