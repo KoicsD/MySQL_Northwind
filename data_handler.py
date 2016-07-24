@@ -54,8 +54,8 @@ class Importer:
                     if to_commit:
                         connection.commit()
                 except Exception as err:
-                    raise RuntimeError("An Exception was raised when processing file: '" + file_path + "'\n" +
-                                       "at line " + str(csv_reader.line_num)) from err
+                    raise RuntimeError("A(n) " + type(err).__name__ + " was raised when processing file: '" + file_path +
+                                       "'\nat line " + str(csv_reader.line_num)) from err
 
     @staticmethod
     def import_employees(to_commit=True):

@@ -31,7 +31,7 @@ class Record:
         for key, value in a_dict.items():
             type_of_attr = cls.get_field_type(key)
             if type_of_attr is None:
-                raise KeyError("Unknown field '" + key + "' for record-type '" + cls.__name__ + "'")
+                raise AttributeError("Unknown field '" + key + "' for record-type '" + cls.__name__ + "'")
             if value != "NULL":
                 if type_of_attr == datetime:
                     parsed_value = datetime.strptime(value, date_format)
@@ -57,7 +57,7 @@ class Record:
             cursor_obj.execute(command, tuple(values))
         except sql.Error as err:
             raise RuntimeError("An SQL-Error was raised when inserting into table '" + self.table_name + "'\n" +
-                               "Command:\n" + command + "\n" + "Values:\n" + str(values)) from err
+                               "Command:\n" + command + "\n" + "Values:\n" + str(tuple(values))) from err
 
     def to_dict(self):
         new_dict = {}
@@ -76,11 +76,11 @@ class Record:
         new_obj = cls()
         field_names = cls.get_field_names()
         if len(field_names) != len(values):
-            raise TypeError("Inappropriate number of arguments for composing '" + cls.__name__ + "' record-object\n" +
-                            "Expected: " + str(len(field_names)) + ", Actual: " + str(len(values)))
+            raise AttributeError("Inappropriate number of fields for composing '" + cls.__name__ + "' record-object\n" +
+                                 "Expected: " + str(len(field_names)) + ", Actual: " + str(len(values)))
         for i in range(len(field_names)):
             if values[i] is not None and type(values[i]) != cls.get_field_type(field_names[i]):
-                raise TypeError("Inappropriate type of " + str(i) + "th argument (of " + str(len(field_names)) +
+                raise TypeError("Inappropriate type of " + str(i) + "th field (of " + str(len(field_names)) +
                                 ") for composing '" + cls.__name__ + "' record-object\n" +
                                 "Expected: " + str(cls.get_field_type(field_names[i])) +
                                 ", Actual: " + str(type(values[i])) +
@@ -104,7 +104,7 @@ class Record:
                                "Command:\n" + query) from sql_err
         except Exception as err:
             if record is not None:
-                raise RuntimeError("An Exception was raised during restoring '" + cls.__name__ +
+                raise RuntimeError("A(n) " + type(err).__name__ + " was raised during restoring '" + cls.__name__ +
                                    "' object from database\n" + "Query:\n'" + query + "'\n" +
                                    "Raw response:\n" + str(record)) from err
             else:
