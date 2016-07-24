@@ -2,7 +2,6 @@ __author__ = 'KoicsD'
 import json
 import csv
 import mysql.connector as sql
-from mysql.connector import errorcode
 import record_template
 from employee import Employee
 from customer import Customer
@@ -49,7 +48,7 @@ class Importer:
             csv_reader = csv.DictReader(file_obj, delimiter=';')
             for row in csv_reader:
                 try:
-                    new_record = record_class.parse(row)
+                    new_record = record_class.from_dict(row)
                     new_record.persist()
                     record_list.append(new_record)
                     if to_commit:
@@ -92,10 +91,10 @@ class Exporter:
         global connection
         record_list += record_class.select()
         with open(file_path, "w", encoding="utf-8", newline='') as file_obj:
-            csv_writer = csv.DictWriter(file_obj, record_class.get_fields(), delimiter=';')
+            csv_writer = csv.DictWriter(file_obj, record_class.get_field_names(), delimiter=';')
             csv_writer.writeheader()
             for record in record_list:
-                csv_writer.writerow(record.to_csv())
+                csv_writer.writerow(record.to_dict())
 
     @staticmethod
     def export_employees():
