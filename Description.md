@@ -10,12 +10,12 @@ There is a given database schema named Northwind. You can read an article which 
 https://theaccessbuddy.wordpress.com/2011/07/03/northwind-database-explained/  
 You can find the relational model and the creational scripts below. Before you start to work on the weekly exercises please run these scripts on your machine to create the DB what you will work with.  
 Connect to your localhost db as an admin  
-Execute [01_Northwind.MySQL5_create_database.sql](description/01_Northwind.MySQL5_create_database.sql)  
-Execute [02_Northwind.MySQL5.sql](description/02_Northwind.MySQL5.sql)  
-Execute [03_Northwind_users_creation_and_grant_access.sql](description/03_Northwind_users_creation_and_grant_access.sql)  
+Execute [01_Northwind.MySQL5_create_database.sql](Description/01_Northwind.MySQL5_create_database.sql)  
+Execute [02_Northwind.MySQL5.sql](Description/02_Northwind.MySQL5.sql)  
+Execute [03_Northwind_users_creation_and_grant_access.sql](Description/03_Northwind_users_creation_and_grant_access.sql)  
 After this please tries to explore a DB structure and the data it contains. What kind of relationship are between the different tables. On this DB you can practice and repeat the basic SQL queries what you learnt. In the afternoon it will help us to summerize what you learnt about the SQL so far.
 
-![](description/remote_northwind.png)
+![](Description/remote_northwind.png)
 
 -----------
 
@@ -48,10 +48,10 @@ List table : Sub-menu > Employees, Customers, Orders, Orders and details
 --------
 
 Attachments:  
-[customers.csv](description/customers.csv)  
-[employees.csv](description/employees.csv)  
-[order_details.csv](description/order_details.csv)  
-[orders.csv](description/orders.csv)  
+[customers.csv](Description/customers.csv)  
+[employees.csv](Description/employees.csv)  
+[order_details.csv](Description/order_details.csv)  
+[orders.csv](Description/orders.csv)  
 
 --------
 
@@ -205,7 +205,7 @@ It should be sorted by CategoryName.
 -----
 
 Attachments:
-[*DBCooler.jar*](description/DBCooler.jar)
+[*DBCooler.jar*](Description/DBCooler.jar)
 
 -----
 
