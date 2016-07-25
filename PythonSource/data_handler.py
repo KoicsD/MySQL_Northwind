@@ -1,5 +1,6 @@
 __author__ = 'KoicsD'
 import json
+import re
 import csv
 import mysql.connector as sql
 import abstract_record
@@ -7,6 +8,8 @@ from employee import Employee
 from customer import Customer
 from order import Order
 from order_detail import OrderDetail
+from sys import argv
+from os.path import abspath
 
 
 employees_path = "Data/employees.csv"
@@ -23,13 +26,55 @@ orders = []
 order_details = []
 
 
+def set_paths(root=None, employees=None, customers=None, orders=None, order_details=None):
+    global employees_path, customers_path, orders_path, order_details_path
+    if root is not None:
+        employees_path = re.sub("^Data", root, employees_path)
+        customers_path = re.sub("^Data", root, customers_path)
+        orders_path = re.sub("^Data", root, orders_path)
+        order_details_path = re.sub("^Data", root, order_details_path)
+    if employees is not None:
+        employees_path = employees
+    if customers is not None:
+        customers_path = customers
+    if orders is not None:
+        orders_path = orders
+    if order_details is not None:
+        order_details_path = order_details
+    if root is not None and \
+            (employees is not None or customers is not None or orders is not None or order_details is not None):
+        print("Warning: Config-file defined CSV-root and separate CSV file-path at the same time!")
+
+
 def startup():
     global connection
-    with open("connection.json") as config_file:
-        file_content = config_file.read()
-        parsed_params = json.loads(file_content)
-        connection = sql.connect(**parsed_params)
-        abstract_record.cursor_obj = connection.cursor()
+    global employees_path, customers_path, orders_path, order_details_path
+    config_file_path = "config.json"
+    if len(argv) > 2:
+        raise RuntimeError("Only one optional argument is allowed: config-file path")
+    if len(argv) == 2:
+        config_file_path = argv[1]
+    try:
+        with open(config_file_path) as config_file:
+            file_content = config_file.read()
+            parsed_params = json.loads(file_content)
+            if "csv" in parsed_params:
+                set_paths(**parsed_params["csv"])
+            if "database" not in parsed_params["sql"]:
+                raise AttributeError("Config-file must specify name of database")
+            connection = sql.connect(**parsed_params["sql"])
+            abstract_record.cursor_obj = connection.cursor()
+            print("Configurations:")
+            print("\tEmployees CSV-path: " + abspath(employees_path))
+            print("\tCustomers CSV-path: " + abspath(customers_path))
+            print("\tOrders CSV-path: " + abspath(orders_path))
+            print("\tOrder-details CSV-path: " + abspath(order_details_path))
+            print("\tServer host: " + connection.server_host)
+            print("\tServer port: " + str(connection.server_port))
+            print("\tDatabase: " + connection.database)
+    except Exception as err:
+        raise RuntimeError("A(n) " + type(err).__name__ + " was raised when processing config-file:\n" +
+                           abspath(config_file_path)) from err
 
 
 def shutdown():
@@ -54,8 +99,8 @@ class Importer:
                     if to_commit:
                         connection.commit()
                 except Exception as err:
-                    raise RuntimeError("A(n) " + type(err).__name__ + " was raised when processing file: '" + file_path +
-                                       "'\nat line " + str(csv_reader.line_num)) from err
+                    raise RuntimeError("A(n) " + type(err).__name__ + " was raised when processing file:\n" +
+                                       abspath(file_path) + "\nat line " + str(csv_reader.line_num)) from err
 
     @staticmethod
     def import_employees(to_commit=True):

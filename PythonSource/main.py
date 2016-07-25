@@ -1,7 +1,8 @@
 __author__ = 'KoicsD'
-from time import sleep
 import menu
 import data_handler
+from msvcrt import getch
+from os import system
 
 
 main_menu = None
@@ -10,6 +11,8 @@ main_menu = None
 def startup():
     global main_menu
     data_handler.startup()
+    print("Press any key to continue...")
+    getch()
     main_menu = menu.Menu("Menu", "Please, select what you want!")
     sub_menu_1 = menu.Menu("From CSV File to MySQL Server", "Please, select what you want!")
     sub_menu_2 = menu.Menu("From MySQL Server to CSV File", "Please, select what you want!")
@@ -34,7 +37,7 @@ def startup():
     sub_menu_2.add_item(menu_point_2_2)
     sub_menu_2.add_item(menu_point_2_3)
     sub_menu_2.add_item(menu_point_2_4)
-    sub_menu_2.add_item(menu_point_1_5)
+    sub_menu_2.add_item(menu_point_2_5)
 
 
 def shutdown():
@@ -46,13 +49,13 @@ def shutdown():
 def do_task(fun: callable):
     fun()
     print("Success!")
-    sleep(1)
+    getch()
 
 
 def main():
     global main_menu
     main_menu.load()
-    menu.system("cls")
+    system("cls")
 
 
 if __name__ == "__main__":
