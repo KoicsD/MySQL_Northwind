@@ -66,6 +66,8 @@ target/
 
 # data for running:
 Data/
+Resources/
 
 # non-public files of experimenting:
 playgruond/
+Playgruond/
