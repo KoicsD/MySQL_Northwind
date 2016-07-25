@@ -15,7 +15,9 @@ The files mentors shared with us are in directory [*Description*](Description/).
 In directory [*PythonSource*](PythonSoucre/) and [*SQLExcercises*](SQLExcercises/)
 you can find the python-files and SQL-scripts I've created as solution of the task, respectively.  
 In directory [*SampleFiles*](SampleFiles/) you can find files
-I've created both for my own convenience and to let them contain some sample code.  
-If you want to try my program, [here are the steps to follow](HowToRun.md). 
+I've created both for my own convenience and to let them contain some sample code.
+
+If you want to try my program, [here are the steps to follow](HowToRun.md).
+Or just simply use [startup.bat](startup.bat) on Windows.
 
 Thank you for tracking our work!
