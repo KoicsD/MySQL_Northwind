@@ -70,7 +70,7 @@ class Menu(MenuItem):
             self.list_items(index.value)
             print('-' * 21)
             print("Left arrow, Up arrow: move up; Right arrow, Up arrow: move down")
-            print("Enter: select; Backspace: back to last submenu; Esc: return to main menu")
+            print("Enter: select; Backspace: back to parent submenu; Esc: quit menu")
             usr_ans = q_input()
 
             if usr_ans == enum_keys["up"] or usr_ans == enum_keys["left"]:

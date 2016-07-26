@@ -11,7 +11,7 @@ main_menu = None
 def startup():
     global main_menu
     data_handler.startup()
-    print("Press any key to continue...")
+    print("\nPress any key to continue...")
     getch()
     main_menu = menu.Menu("Menu", "Please, select what you want!")
     sub_menu_1 = menu.Menu("From CSV File to MySQL Server", "Please, select what you want!")

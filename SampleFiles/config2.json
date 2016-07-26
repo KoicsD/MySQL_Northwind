@@ -4,5 +4,8 @@
     "user": "root",
     "passwd": "****",
     "database": "northwind"
+  },
+  "csv": {
+    "root": "csv_root"
   }
 }

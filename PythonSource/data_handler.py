@@ -61,9 +61,10 @@ def startup():
             if "csv" in parsed_params:
                 set_paths(**parsed_params["csv"])
             if "database" not in parsed_params["sql"]:
-                raise AttributeError("Config-file must specify name of database")
+                raise LookupError("No database name specified in configuration dictionary")
             connection = sql.connect(**parsed_params["sql"])
             abstract_record.cursor_obj = connection.cursor()
+            print()
             print("Configurations:")
             print("\tEmployees CSV-path: " + abspath(employees_path))
             print("\tCustomers CSV-path: " + abspath(customers_path))
@@ -73,7 +74,7 @@ def startup():
             print("\tServer port: " + str(connection.server_port))
             print("\tDatabase: " + connection.database)
     except Exception as err:
-        raise RuntimeError("A(n) " + type(err).__name__ + " was raised when processing config-file:\n" +
+        raise RuntimeError("A(n) " + type(err).__name__ + " was raised when processing config-file:\n\t" +
                            abspath(config_file_path)) from err
 
 

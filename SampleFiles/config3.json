@@ -1,0 +1,14 @@
+{
+  "sql": {
+    "host": "127.0.0.1",
+    "user": "root",
+    "passwd": "****",
+    "database": "northwind"
+  },
+  "csv": {
+    "employees": "csv_root/employees.csv",
+    "customers": "csv_root/customers.csv",
+    "orders": "csv_root/orders.csv",
+    "order_details": "csv_root/order_details.csv"
+  }
+}
