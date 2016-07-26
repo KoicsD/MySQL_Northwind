@@ -8,7 +8,6 @@ from employee import Employee
 from customer import Customer
 from order import Order
 from order_detail import OrderDetail
-from sys import argv
 from os.path import abspath
 
 
@@ -46,22 +45,17 @@ def set_paths(root=None, employees=None, customers=None, orders=None, order_deta
         print("Warning: Config-file defined CSV-root and separate CSV file-path at the same time!")
 
 
-def startup():
+def startup(config_file_path="config.json"):
     global connection
     global employees_path, customers_path, orders_path, order_details_path
-    config_file_path = "config.json"
-    if len(argv) > 2:
-        raise RuntimeError("Only one optional argument is allowed: config-file path")
-    if len(argv) == 2:
-        config_file_path = argv[1]
     try:
         with open(config_file_path) as config_file:
             file_content = config_file.read()
             parsed_params = json.loads(file_content)
-            if "csv" in parsed_params:
-                set_paths(**parsed_params["csv"])
             if "database" not in parsed_params["sql"]:
                 raise LookupError("No database name specified in configuration dictionary")
+            if "csv" in parsed_params:
+                set_paths(**parsed_params["csv"])
             connection = sql.connect(**parsed_params["sql"])
             abstract_record.cursor_obj = connection.cursor()
             print()

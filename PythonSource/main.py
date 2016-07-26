@@ -1,6 +1,7 @@
 __author__ = 'KoicsD'
 import menu
 import data_handler
+from sys import argv
 from msvcrt import getch
 from os import system
 
@@ -10,7 +11,12 @@ main_menu = None
 
 def startup():
     global main_menu
-    data_handler.startup()
+    if len(argv) > 2:
+        raise RuntimeError("Only one optional argument is allowed: config-file path")
+    if len(argv) == 2:
+        data_handler.startup(argv[1])
+    else:
+        data_handler.startup()
     print("\nPress any key to continue...")
     getch()
     main_menu = menu.Menu("Menu", "Please, select what you want!")
