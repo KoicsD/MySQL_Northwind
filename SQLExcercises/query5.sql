@@ -1,42 +1,13 @@
 SELECT
-	YearOfIncome,
-    CategoryName,
-    ProductName,
-    SUM(OrderTotal) AS ProductSales
-FROM
-	(
-		SELECT
-			YEAR(ShippedDate) AS YearOfIncome,
-			(
-				SELECT
-					CategoryName
-				FROM
-					Categories
-				WHERE
-					Categories.CategoryID = Products.CategoryID
-			)
-			AS CategoryName,
-			ProductName,
-			(
-				OrderDetails.UnitPrice * Quantity * (1 - Discount)
-			)
-			AS OrderTotal,
-            OrderDetails.ProductID AS ProductID
-		FROM
-			Products
-		JOIN
-			OrderDetails
-				ON Products.ProductID = OrderDetails.ProductID
-		JOIN
-			Orders
-				ON OrderDetails.OrderID = Orders.OrderID
-	)
-    AS OrderSeparated
-GROUP BY
-	ProductID, YearOfIncome
-ORDER BY
-	ProductName, YearOfIncome;
-
+	YEAR(ShippeDate) AS YearOfIncome,
+	CategoryName,
+	ProductName,
+	SUM(OrderDetails.UnitPrice * Quantity * (1 - Discount)) AS Sales
+FROM Categories
+JOIN Products ON Categories.CategoryID = Products.CategoryID
+JOIN OrderDetails ON Products.ProductID = OrderDetails.ProductID
+JOIN Orders ON OrderDetails.OrderID = Orders.OrderID
+ORDER BY ProductName, YearOfIncome;
 
 /*SELECT
     Products.ProductName,
