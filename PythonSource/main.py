@@ -4,6 +4,7 @@ import data_handler
 from sys import argv
 from msvcrt import getch
 from os import system
+from warnings import simplefilter
 
 
 main_menu = None
@@ -11,12 +12,27 @@ main_menu = None
 
 def startup():
     global main_menu
-    if len(argv) > 2:
-        raise RuntimeError("Only one optional argument is allowed: config-file path")
-    if len(argv) == 2:
-        data_handler.startup(argv[1])
-    else:
+    if len(argv) == 1:
+        simplefilter("error", data_handler.ConstraintWarning)
+        print()
+        print("ConstraintWarning action-level: error")
+        print()
         data_handler.startup()
+    elif len(argv) == 2:
+        simplefilter(argv[1], data_handler.ConstraintWarning)
+        print()
+        print("ConstraintWarning action-level: " + argv[1])
+        print()
+        data_handler.startup()
+    elif len(argv) == 3:
+        simplefilter(argv[1], data_handler.ConstraintWarning)
+        print()
+        print("ConstraintWarning action-level: " + argv[1])
+        print()
+        data_handler.startup(argv[2])
+    else:
+        raise RuntimeError("Only two optional arguments are allowed: " +
+                           "ConstraintWarning action-level and config-file path")
     print("\nPress any key to continue...")
     getch()
     main_menu = menu.Menu("Menu", "Please, select what you want!")

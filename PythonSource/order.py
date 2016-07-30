@@ -1,6 +1,5 @@
 __author__ = 'KoicsD'
 from abstract_record import *
-from decimal import Decimal
 
 
 class Order(Record):

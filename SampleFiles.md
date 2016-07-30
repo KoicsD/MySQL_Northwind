@@ -61,6 +61,7 @@ from datetime import datetime
 
 # date_format = "%Y-%m-%d"  # original
 date_format = "%Y.%m.%d %H:%M"  # new version
+data_display_limit = 100
 
 ```
 

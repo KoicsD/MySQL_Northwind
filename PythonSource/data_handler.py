@@ -4,11 +4,13 @@ import re
 import csv
 import mysql.connector as sql
 import abstract_record
+from constraints import ConstraintWarning
 from employee import Employee
 from customer import Customer
 from order import Order
 from order_detail import OrderDetail
 from os.path import abspath
+from warnings import warn
 
 
 employees_path = "Data/employees.csv"
@@ -27,6 +29,9 @@ order_details = []
 
 def set_paths(root=None, employees=None, customers=None, orders=None, order_details=None):
     global employees_path, customers_path, orders_path, order_details_path
+    if root is not None and \
+            (employees is not None or customers is not None or orders is not None or order_details is not None):
+        warn("Config-file defines CSV-root and separate CSV file-paths at the same time!", UserWarning)
     if root is not None:
         employees_path = re.sub("^Data", root, employees_path)
         customers_path = re.sub("^Data", root, customers_path)
@@ -40,9 +45,6 @@ def set_paths(root=None, employees=None, customers=None, orders=None, order_deta
         orders_path = orders
     if order_details is not None:
         order_details_path = order_details
-    if root is not None and \
-            (employees is not None or customers is not None or orders is not None or order_details is not None):
-        print("Warning: Config-file defined CSV-root and separate CSV file-path at the same time!")
 
 
 def startup(config_file_path="config.json"):
@@ -58,7 +60,6 @@ def startup(config_file_path="config.json"):
                 set_paths(**parsed_params["csv"])
             connection = sql.connect(**parsed_params["sql"])
             abstract_record.cursor_obj = connection.cursor()
-            print()
             print("Configurations:")
             print("\tEmployees CSV-path: " + abspath(employees_path))
             print("\tCustomers CSV-path: " + abspath(customers_path))
@@ -67,7 +68,7 @@ def startup(config_file_path="config.json"):
             print("\tServer host: " + connection.server_host)
             print("\tServer port: " + str(connection.server_port))
             print("\tDatabase: " + connection.database)
-    except Exception as err:
+    except (Exception, Warning) as err:
         raise RuntimeError("A(n) " + type(err).__name__ + " was raised when processing config-file:\n\t" +
                            abspath(config_file_path)) from err
 
@@ -93,7 +94,7 @@ class Importer:
                     record_list.append(new_record)
                     if to_commit:
                         connection.commit()
-                except Exception as err:
+                except (Exception, Warning) as err:
                     raise RuntimeError("A(n) " + type(err).__name__ + " was raised when processing file:\n" +
                                        abspath(file_path) + "\nat line " + str(csv_reader.line_num)) from err
 
