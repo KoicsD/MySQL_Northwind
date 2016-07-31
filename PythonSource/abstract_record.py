@@ -42,22 +42,9 @@ class Record(metaclass=ABCMeta):
 
     @classmethod
     def get_field_constraints(cls, field_name):
-        for field_info in cls.fields:
-            f, t = field_info[0:2]
-            constraints = ()
-            if len(field_info) > 2:
-                constraint_info = field_info[2]
-                if type(constraint_info) == tuple:
-                    constraints = constraint_info
-                elif isinstance(constraint_info, SingleFieldConstraint) or \
-                        issubclass(type(constraint_info), SingleFieldConstraint):
-                    constraints = (constraint_info,)
-                else:
-                    raise TypeError("Class-definition for record-type '" + cls.__name__ + "' is corrupt:\n" +
-                                    "Constraints of field '" + field_name + "' must be " +
-                                    "a subtype of SingleFieldConstraint, an instance of it " +
-                                    "or a tuple of more of them.\n" +
-                                    "Found: " + str(constraint_info))
+        for field in cls.fields:
+            f, t = field[0:2]
+            constraints = field[2:]
             if f == field_name:
                 return constraints
         raise AttributeError("Unknown field '" + field_name + "' for record-type '" + cls.__name__ + "'")
@@ -189,11 +176,11 @@ class Record(metaclass=ABCMeta):
     @classmethod
     def __ensure_single_field_constraints(cls, field_name: str, value):
         for constraint in cls.get_field_constraints(field_name):
-            if constraint == NotNull:
+            if constraint == NotNull or isinstance(constraint, NotNull):
                 if value is None:
                     warn("Field '" + field_name + "' of record-type '" + cls.__name__ +
                          "' cannot be NULL", ConstraintWarning)
-            elif type(constraint) == Min:
+            elif isinstance(constraint, Min):
                 if value is not None:
                     if not isinstance(value, (int, float, datetime, Decimal)):
                         raise TypeError("Class-definition for record-type '" + cls.__name__ + "' is corrupt:\n" +
@@ -208,7 +195,7 @@ class Record(metaclass=ABCMeta):
                         warn("Field '" + field_name + "' of record-type '" + cls.__name__ +
                              "' cannot be lower than or equal to " + str(constraint.value) +
                              "\nFound: " + str(value), ConstraintWarning)
-            elif type(constraint) == Max:
+            elif isinstance(constraint, Max):
                 if value is not None:
                     if not isinstance(value, (int, float, datetime, Decimal)):
                         raise TypeError("Class-definition for record-type '" + cls.__name__ + "' is corrupt:\n" +
@@ -223,7 +210,7 @@ class Record(metaclass=ABCMeta):
                         warn("Field '" + field_name + "' of record-type '" + cls.__name__ +
                              "' cannot be greater than or equal to " + str(constraint.value) +
                              "\nActual value: " + str(value), ConstraintWarning)
-            elif type(constraint) == Size:
+            elif isinstance(constraint, Size):
                 if value is not None:
                     if not isinstance(value, (str, bytes)):
                         raise TypeError("Class-definition for record-type '" + cls.__name__ + "' is corrupt:\n" +

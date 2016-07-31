@@ -92,11 +92,11 @@ class Importer:
                     new_record = record_class.from_dict(row)
                     new_record.persist()
                     record_list.append(new_record)
-                    if to_commit:
-                        connection.commit()
                 except (Exception, Warning) as err:
                     raise RuntimeError("A(n) " + type(err).__name__ + " was raised when processing file:\n" +
                                        abspath(file_path) + "\nat line " + str(csv_reader.line_num)) from err
+            if to_commit:
+                connection.commit()
 
     @staticmethod
     def import_employees(to_commit=True):
