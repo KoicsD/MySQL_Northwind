@@ -14,7 +14,7 @@ and we will check our work by a [*Java*](https://www.java.com/en/) application.
 Project structure:
 
 * The files mentors shared with us are in directory [*Description*](Description/).  
-* In directory [*PythonSource*](PythonSoucre/) and [*SQLExcercises*](SQLExcercises/)
+* In directory [*PythonSource*](PythonSource/) and [*SQLExcercises*](SQLExcercises/)
   you can find the *python*-files and *SQL*-scripts I've created as solution of the task, respectively.
 * Before running, you have to create a directory named *Resources*
   and copy a valid *config.json* file to it (see [*SampleFiles*](SampleFiles/)).
